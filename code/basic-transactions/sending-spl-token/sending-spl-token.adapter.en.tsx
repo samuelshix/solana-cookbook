@@ -1,6 +1,6 @@
 import { WalletNotConnectedError } from "@solana/wallet-adapter-base";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
-import { Keypair, SystemProgram, Transaction } from "@solana/web3.js";
+import { Transaction, sendAndConfirmTransaction } from "@solana/web3.js";
 import { TOKEN_PROGRAM_ID, createTransferInstruction } from "@solana/spl-token";
 import React, { FC, useCallback } from "react";
 
@@ -17,18 +17,22 @@ export const SendSPLTokenToAddress: FC = (
 
     const transaction = new Transaction().add(
       createTransferInstruction(
-        fromTokenAccount.address,
-        toTokenAccount.address,
-        fromWallet.publicKey,
-        1,
-        [],
+        fromTokenAccount.address, // source
+        toTokenAccount.address, // destination
+        fromWallet.publicKey, // owner
+        1, // amount
+        [], // multiSigners
         TOKEN_PROGRAM_ID
       )
     );
 
-    const signature = await sendTransaction(transaction, connection);
-
-    await connection.confirmTransaction(signature, "processed");
+    // Send and confirm transaction
+    const signature = await sendAndConfirmTransaction(
+      connection,
+      transaction,
+      [fromWallet],
+      { commitment: "confirmed" }
+    );
   }, [publicKey, sendTransaction, connection]);
 
   return (
