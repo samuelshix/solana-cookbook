@@ -314,6 +314,9 @@ When you're working locally, you need some SOL in order to send
 transactions. In non-mainnet environments you can receive SOL by
 airdropping it to your address
 
+You can also use `solana airdrop` command to airdrop SOL to your address, or visit faucets like: [faucet.solana.com](https://faucet.solana.com/)
+to get some SOL on devnet.
+
 <SolanaCodeGroup>
   <SolanaCodeGroupItem title="TS" active>
 
